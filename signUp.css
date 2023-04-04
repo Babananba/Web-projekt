@@ -1,0 +1,11 @@
+body {
+    height: 100vh;
+}
+
+.d-flex.justify-content-center .signup .form-group{
+    margin-bottom: 12px;
+}
+
+.col-sm-2.col-form-label{
+    padding-right: 25px;
+}
