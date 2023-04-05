@@ -84,17 +84,18 @@ $motherboard = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <?php foreach ($motherboard as $products) : ?>
         <div class="col-12 col-md-6 col-lg-4">
           <div class="card">
-          <a href="product.php?page=product&id=<?=$products['id']?>">
-            <img src="Ref/<?= $products['img'] ?>" alt="ph" class="card-img-top">
-            <div class="card-body">
-              <h5 class="card-title"><?= $products['title'] ?></h5></a>
-              <p class="card-text"><?= $products['price'] ?>$</p>
-              <a href="" class="btn">Order now</a>
-            </div>
+            <a href="product.php?page=product&id=<?= $products['id'] ?>">
+              <img src="Ref/<?= $products['img'] ?>" alt="ph" class="card-img-top">
+              <div class="card-body">
+                <h5 class="card-title"><?= $products['title'] ?></h5>
+            </a>
+            <p class="card-text"><?= $products['price'] ?>$</p>
+            <a href="" class="btn">Order now</a>
           </div>
         </div>
-      <?php endforeach; ?>
     </div>
+  <?php endforeach; ?>
+  </div>
   </div>
 
   <br>
@@ -114,22 +115,22 @@ $motherboard = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
       <!-- Right -->
       <div>
-        <a href="" class="me-4 link-secondary">
+        <a href="https://www.facebook.com/" class="me-4 link-secondary">
           <i class="fab fa-facebook-f"></i>
         </a>
-        <a href="" class="me-4 link-secondary">
+        <a href="https://twitter.com/Babananba1" class="me-4 link-secondary">
           <i class="fab fa-twitter"></i>
         </a>
-        <a href="" class="me-4 link-secondary">
+        <a href="https://www.google.com/" class="me-4 link-secondary">
           <i class="fab fa-google"></i>
         </a>
-        <a href="" class="me-4 link-secondary">
+        <a href="https://www.instagram.com/peetekaboo/" class="me-4 link-secondary">
           <i class="fab fa-instagram"></i>
         </a>
-        <a href="" class="me-4 link-secondary">
+        <a href="https://www.linkedin.com/" class="me-4 link-secondary">
           <i class="fab fa-linkedin"></i>
         </a>
-        <a href="" class="me-4 link-secondary">
+        <a href="https://github.com/Babananba" class="me-4 link-secondary">
           <i class="fab fa-github"></i>
         </a>
       </div>
@@ -146,11 +147,10 @@ $motherboard = $stmt->fetchAll(PDO::FETCH_ASSOC);
           <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
             <!-- Content -->
             <h6 class="text-uppercase fw-bold mb-4">
-              <i class="fas fa-gem me-3 text-secondary"></i>Company name
+              <i class="fas fa-gem me-3 text-secondary"></i>Hardware Store
             </h6>
             <p>
-              Here you can use rows and columns to organize your footer content. Lorem ipsum
-              dolor sit amet, consectetur adipisicing elit.
+              The best money can buy.
             </p>
           </div>
           <!-- Grid column -->
@@ -159,19 +159,19 @@ $motherboard = $stmt->fetchAll(PDO::FETCH_ASSOC);
           <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
             <!-- Links -->
             <h6 class="text-uppercase fw-bold mb-4">
-              Products
+              About our store
             </h6>
             <p>
-              <a href="#!" class="text-reset">Angular</a>
+              <a href="" class="text-reset">Offices</a>
             </p>
             <p>
-              <a href="#!" class="text-reset">React</a>
+              <a href="" class="text-reset">Contacts and information</a>
             </p>
             <p>
-              <a href="#!" class="text-reset">Vue</a>
+              <a href="" class="text-reset">Who are we?</a>
             </p>
             <p>
-              <a href="#!" class="text-reset">Laravel</a>
+              <a href="" class="text-reset">Work and career</a>
             </p>
           </div>
           <!-- Grid column -->
@@ -180,16 +180,16 @@ $motherboard = $stmt->fetchAll(PDO::FETCH_ASSOC);
           <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
             <!-- Links -->
             <h6 class="text-uppercase fw-bold mb-4">
-              Useful links
+              CUSTOMER SERVICE
             </h6>
             <p>
-              <a href="#!" class="text-reset">Pricing</a>
+              <a href="#!" class="text-reset">Help Center</a>
             </p>
             <p>
-              <a href="#!" class="text-reset">Settings</a>
+              <a href="#!" class="text-reset">Track an Order</a>
             </p>
             <p>
-              <a href="#!" class="text-reset">Orders</a>
+              <a href="#!" class="text-reset">Return Policy</a>
             </p>
             <p>
               <a href="#!" class="text-reset">Help</a>
@@ -201,10 +201,10 @@ $motherboard = $stmt->fetchAll(PDO::FETCH_ASSOC);
           <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
             <!-- Links -->
             <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
-            <p><i class="fas fa-home me-3 text-secondary"></i> New York, NY 10012, US</p>
+            <p><i class="fas fa-home me-3 text-secondary"></i> Osijek, Croatia</p>
             <p>
               <i class="fas fa-envelope me-3 text-secondary"></i>
-              info@example.com
+              petar.radonic1912@gmail.com
             </p>
             <p><i class="fas fa-phone me-3 text-secondary"></i> + 01 234 567 88</p>
             <p><i class="fas fa-print me-3 text-secondary"></i> + 01 234 567 89</p>
@@ -215,13 +215,6 @@ $motherboard = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </div>
     </section>
     <!-- Section: Links  -->
-
-    <!-- Copyright -->
-    <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.025);">
-      © 2021 Copyright:
-      <a class="text-reset fw-bold" href="https://mdbootstrap.com/">MDBootstrap.com</a>
-    </div>
-    <!-- Copyright -->
   </footer>
   <!-- Footer -->
 </body>
