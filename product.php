@@ -107,17 +107,12 @@ if (isset($_GET['id'])) {
     <br>
     <br>
 
-    <!-- Footer -->
     <footer class="text-center text-lg-start bg-white text-muted">
-        <!-- Section: Social media -->
         <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
-            <!-- Left -->
             <div class="me-5 d-none d-lg-block">
                 <span>Get connected with us on social networks:</span>
             </div>
-            <!-- Left -->
 
-            <!-- Right -->
             <div>
                 <a href="https://www.facebook.com/" class="me-4 link-secondary">
                     <i class="fab fa-facebook-f"></i>
@@ -138,18 +133,12 @@ if (isset($_GET['id'])) {
                     <i class="fab fa-github"></i>
                 </a>
             </div>
-            <!-- Right -->
         </section>
-        <!-- Section: Social media -->
 
-        <!-- Section: Links  -->
         <section class="">
             <div class="container text-center text-md-start mt-5">
-                <!-- Grid row -->
                 <div class="row mt-3">
-                    <!-- Grid column -->
                     <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-                        <!-- Content -->
                         <h6 class="text-uppercase fw-bold mb-4">
                             <i class="fas fa-gem me-3 text-secondary"></i>Hardware Store
                         </h6>
@@ -157,11 +146,8 @@ if (isset($_GET['id'])) {
                             The best money can buy.
                         </p>
                     </div>
-                    <!-- Grid column -->
 
-                    <!-- Grid column -->
                     <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-                        <!-- Links -->
                         <h6 class="text-uppercase fw-bold mb-4">
                             About our store
                         </h6>
@@ -178,11 +164,8 @@ if (isset($_GET['id'])) {
                             <a href="" class="text-reset">Work and career</a>
                         </p>
                     </div>
-                    <!-- Grid column -->
 
-                    <!-- Grid column -->
                     <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
-                        <!-- Links -->
                         <h6 class="text-uppercase fw-bold mb-4">
                             CUSTOMER SERVICE
                         </h6>
@@ -199,11 +182,8 @@ if (isset($_GET['id'])) {
                             <a href="#!" class="text-reset">Help</a>
                         </p>
                     </div>
-                    <!-- Grid column -->
 
-                    <!-- Grid column -->
                     <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-                        <!-- Links -->
                         <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
                         <p><i class="fas fa-home me-3 text-secondary"></i> Osijek, Croatia</p>
                         <p>
@@ -213,14 +193,10 @@ if (isset($_GET['id'])) {
                         <p><i class="fas fa-phone me-3 text-secondary"></i> + 01 234 567 88</p>
                         <p><i class="fas fa-print me-3 text-secondary"></i> + 01 234 567 89</p>
                     </div>
-                    <!-- Grid column -->
                 </div>
-                <!-- Grid row -->
             </div>
         </section>
-        <!-- Section: Links  -->
     </footer>
-    <!-- Footer -->
 </body>
 
 </html>

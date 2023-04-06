@@ -1,19 +1,18 @@
 <?php
-    session_start();
-    include 'classes/dbh.classes.php';
-    try{
-        $username = "root";
-        $password ="";
-        $pdo = new PDO('mysql:host=localhost;dbname=ooplogin', $username, $password);
-    }
-    catch (PDOException $e) {
-        print "Error!: " . $e->getMessage() . "<br/>";
-        die();
-    }
+session_start();
+include 'classes/dbh.classes.php';
+try {
+  $username = "root";
+  $password = "";
+  $pdo = new PDO('mysql:host=localhost;dbname=ooplogin', $username, $password);
+} catch (PDOException $e) {
+  print "Error!: " . $e->getMessage() . "<br/>";
+  die();
+}
 
-    $stmt = $pdo->prepare('SELECT * FROM products WHERE type="Case" LIMIT 1');
-    $stmt->execute();
-    $case = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$stmt = $pdo->prepare('SELECT * FROM products WHERE type="Case" LIMIT 1');
+$stmt->execute();
+$case = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -42,8 +41,7 @@
         <div class="collapse navbar-collapse" id="collapsibleNavbar">
           <ul class="navbar-nav me-auto">
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"><img
-                  src="ref/grafickalogo.png" width="40px" height="40px"></a>
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"><img src="ref/grafickalogo.png" width="40px" height="40px"></a>
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="Procesori.php">Processors</a></li>
                 <li><a class="dropdown-item" href="VideoCards.php">Video Cards</a></li>
@@ -77,44 +75,40 @@
   <br>
   <br>
   <br>
-  
+
 
 
   <div class="container">
-        <h3>Cases</h3>
-        <div class="row g-3">
-        <?php foreach ($case as $products): ?>
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="card">
-                <a href="product.php?page=product&id=<?=$products['id']?>">
-                    <img src="Ref/<?=$products['img']?>" alt="ph" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title"><?=$products['title']?></h5></a>
-                        <p class="card-text"><?=$products['price']?>$</p>
-                        <a href="" class="btn">Order now</a>
-                    </div>
-                </div>
-            </div>
-        <?php endforeach; ?>
+    <h3>Cases</h3>
+    <div class="row g-3">
+      <?php foreach ($case as $products) : ?>
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="card">
+            <a href="product.php?page=product&id=<?= $products['id'] ?>">
+              <img src="Ref/<?= $products['img'] ?>" alt="ph" class="card-img-top">
+              <div class="card-body">
+                <h5 class="card-title"><?= $products['title'] ?></h5>
+            </a>
+            <p class="card-text"><?= $products['price'] ?>$</p>
+            <a href="" class="btn">Order now</a>
+          </div>
         </div>
     </div>
+  <?php endforeach; ?>
+  </div>
+  </div>
 
   <br>
   <br>
   <br>
 
 
-  <!-- Footer -->
   <footer class="text-center text-lg-start bg-white text-muted">
-    <!-- Section: Social media -->
     <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
-      <!-- Left -->
       <div class="me-5 d-none d-lg-block">
         <span>Get connected with us on social networks:</span>
       </div>
-      <!-- Left -->
 
-      <!-- Right -->
       <div>
         <a href="https://www.facebook.com/" class="me-4 link-secondary">
           <i class="fab fa-facebook-f"></i>
@@ -135,18 +129,12 @@
           <i class="fab fa-github"></i>
         </a>
       </div>
-      <!-- Right -->
     </section>
-    <!-- Section: Social media -->
 
-    <!-- Section: Links  -->
     <section class="">
       <div class="container text-center text-md-start mt-5">
-        <!-- Grid row -->
         <div class="row mt-3">
-          <!-- Grid column -->
           <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-            <!-- Content -->
             <h6 class="text-uppercase fw-bold mb-4">
               <i class="fas fa-gem me-3 text-secondary"></i>Hardware Store
             </h6>
@@ -154,13 +142,10 @@
               The best money can buy.
             </p>
           </div>
-          <!-- Grid column -->
 
-          <!-- Grid column -->
           <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-            <!-- Links -->
             <h6 class="text-uppercase fw-bold mb-4">
-            About our store
+              About our store
             </h6>
             <p>
               <a href="" class="text-reset">Offices</a>
@@ -175,13 +160,10 @@
               <a href="" class="text-reset">Work and career</a>
             </p>
           </div>
-          <!-- Grid column -->
 
-          <!-- Grid column -->
           <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
-            <!-- Links -->
             <h6 class="text-uppercase fw-bold mb-4">
-            CUSTOMER SERVICE
+              CUSTOMER SERVICE
             </h6>
             <p>
               <a href="#!" class="text-reset">Help Center</a>
@@ -196,11 +178,8 @@
               <a href="#!" class="text-reset">Help</a>
             </p>
           </div>
-          <!-- Grid column -->
 
-          <!-- Grid column -->
           <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-            <!-- Links -->
             <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
             <p><i class="fas fa-home me-3 text-secondary"></i> Osijek, Croatia</p>
             <p>
@@ -210,14 +189,11 @@
             <p><i class="fas fa-phone me-3 text-secondary"></i> + 01 234 567 88</p>
             <p><i class="fas fa-print me-3 text-secondary"></i> + 01 234 567 89</p>
           </div>
-          <!-- Grid column -->
         </div>
-        <!-- Grid row -->
       </div>
     </section>
-    <!-- Section: Links  -->
   </footer>
-  <!-- Footer -->
+
 </body>
 
 </html>
