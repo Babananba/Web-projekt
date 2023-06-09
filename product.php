@@ -89,7 +89,7 @@ if (isset($_GET['id'])) {
     <br>
 
     <div class="container">
-        <img src="Ref/<?= $products['img'] ?>" width="600" height="500" alt="<?= $products['title'] ?>">
+        <img src="Ref/<?= $products['img'] ?>" width="700" height="500" alt="<?= $products['title'] ?>">
         <div>
             <h1 class="card-title">
                 <?= $products['title'] ?>
@@ -100,6 +100,7 @@ if (isset($_GET['id'])) {
                 <div class="description">
                     <?= $products['opis'] ?>
                 </div>
+                <a href="" class="btn">Order now</a>
         </div>
     </div>
 

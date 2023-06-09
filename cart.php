@@ -1,3 +1,73 @@
+<?php
+session_start();
+// Uspostavi vezu s bazom podataka
+$username = "root";
+$password = "";
+$db = new PDO('mysql:host=localhost;dbname=ooplogin', $username, $password);
+
+// Provjeri je li korisnik pritisnuo gumb "Dodaj u košaricu"
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
+  $productId = $_POST['id'];
+  $quantity = $_POST['quantity'];
+
+  // Provjeri postoji li proizvod s traženim ID-om u bazi podataka
+  $stmt = $db->prepare("SELECT * FROM products WHERE id = :id");
+  $stmt->execute(['id' => $productId]);
+  $product = $stmt->fetch(PDO::FETCH_ASSOC);
+
+  if ($product) {
+    // Dodaj proizvod u košaricu
+    $_SESSION['cart'][$productId] = [
+      'id' => $product['id'],
+      'title' => $product['title'],
+      'price' => $product['price'],
+      'quantity' => $quantity
+    ];
+    echo "Proizvod je dodan u košaricu.";
+  } else {
+    echo "Proizvod ne postoji.";
+  }
+}
+
+// ... ostali dijelovi koda za ažuriranje, brisanje i prikazivanje košarice ...
+
+// Prikazivanje proizvoda u košarici
+if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
+  foreach ($_SESSION['cart'] as $productId => $product) {
+    $total = $product['price'] * $product['quantity'];
+  }
+  echo "</table>";
+} else {
+  echo "Košarica je prazna.";
+}
+
+// Ažuriranje količine proizvoda u košarici
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_quantity'])) {
+  $productId = $_POST['id'];
+  $quantity = $_POST['quantity'];
+
+  if (isset($_SESSION['cart'][$productId])) {
+    $_SESSION['cart'][$productId]['quantity'] = $quantity;
+    echo "Količina proizvoda je ažurirana.";
+  } else {
+    echo "Proizvod ne postoji u košarici.";
+  }
+}
+
+
+// Brisanje proizvoda iz košarice
+if (isset($_GET['remove'])) {
+  $productId = $_GET['remove'];
+
+  if (isset($_SESSION['cart'][$productId])) {
+    unset($_SESSION['cart'][$productId]);
+    echo "Proizvod je uklonjen iz košarice.";
+  } else {
+    echo "Proizvod ne postoji u košarici.";
+  }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -60,7 +130,12 @@
         <div class="col-lg-12 col-md-12 col-12">
           <h3 class="display-5 mb-2 text-center">Shopping Cart</h3>
           <p class="mb-5 text-center">
-            <i class="text-info font-weight-bold">3</i> items in your cart
+            <i class="text-info font-weight-bold"><?php
+                                                  $totalItems = 0;
+                                                  foreach ($_SESSION['cart'] as $item) {
+                                                    $totalItems += $item['quantity'];
+                                                  }
+                                                  ?><?= $totalItems ?></i> items in your cart
           </p>
           <table id="shoppingCart" class="table table-condensed table-responsive">
             <thead>
@@ -72,92 +147,47 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td data-th="Product">
-                  <div class="row">
-                    <div class="col-md-3 text-left">
-                      <img src="https://via.placeholder.com/250x250/5fa9f8/ffffff" alt="" class="img-fluid d-none d-md-block rounded mb-2 shadow ">
+              <?php foreach ($_SESSION['cart'] as $productId => $product) : ?>
+                <tr>
+                  <td data-th="Product">
+                    <div class="row">
+                      <div class="col-md-3 text-left">
+                        <img src="https://via.placeholder.com/250x250/5fa9f8/ffffff" alt="" class="img-fluid d-none d-md-block rounded mb-2 shadow ">
+                      </div>
+                      <div class="col-md-9 text-left mt-sm-2">
+                        <h4><?= $product['title'] ?></h4>
+                        <p class="font-weight-light">Brand &amp; Name</p>
+                      </div>
                     </div>
-                    <div class="col-md-9 text-left mt-sm-2">
-                      <h4>Product Name</h4>
-                      <p class="font-weight-light">Brand &amp; Name</p>
+                  </td>
+                  <td data-th="Price"><?= $product['price'] ?></td>
+                  <td data-th="Quantity">
+                    <form method="POST" action="cart.php">
+                      <input type="hidden" name="update_quantity" value="true">
+                      <input type="hidden" name="id" value="<?= $productId ?>">
+                      <input type="number" name="quantity" value="<?= $product['quantity'] ?>" min="1">
+                      <input type="submit" value="Ažuriraj">
+                    </form>
+                  </td>
+                  <td class="actions" data-th="">
+                    <div class="text-right">
+                      <a href="cart.php?remove=<?= $productId ?>">Ukloni</a>
                     </div>
-                  </div>
-                </td>
-                <td data-th="Price">$49.00</td>
-                <td data-th="Quantity">
-                  <input type="number" class="form-control form-control-lg text-center" value="1">
-                </td>
-                <td class="actions" data-th="">
-                  <div class="text-right">
-                    <button class="btn btn-white border-secondary bg-white btn-md mb-2">
-                      <i class="fas fa-sync"></i>
-                    </button>
-                    <button class="btn btn-white border-secondary bg-white btn-md mb-2">
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td data-th="Product">
-                  <div class="row">
-                    <div class="col-md-3 text-left">
-                      <img src="https://via.placeholder.com/250x250/5fa9f8/ffffff" alt="" class="img-fluid d-none d-md-block rounded mb-2 shadow ">
-                    </div>
-                    <div class="col-md-9 text-left mt-sm-2">
-                      <h4>Product Name</h4>
-                      <p class="font-weight-light">Brand &amp; Name</p>
-                    </div>
-                  </div>
-                </td>
-                <td data-th="Price">$49.00</td>
-                <td data-th="Quantity">
-                  <input type="number" class="form-control form-control-lg text-center" value="1">
-                </td>
-                <td class="actions" data-th="">
-                  <div class="text-right">
-                    <button class="btn btn-white border-secondary bg-white btn-md mb-2">
-                      <i class="fas fa-sync"></i>
-                    </button>
-                    <button class="btn btn-white border-secondary bg-white btn-md mb-2">
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td data-th="Product">
-                  <div class="row">
-                    <div class="col-md-3 text-left">
-                      <img src="https://via.placeholder.com/250x250/5fa9f8/ffffff" alt="" class="img-fluid d-none d-md-block rounded mb-2 shadow ">
-                    </div>
-                    <div class="col-md-9 text-left mt-sm-2">
-                      <h4>Product Name</h4>
-                      <p class="font-weight-light">Brand &amp; Name</p>
-                    </div>
-                  </div>
-                </td>
-                <td data-th="Price">$49.00</td>
-                <td data-th="Quantity">
-                  <input type="number" class="form-control form-control-lg text-center" value="1">
-                </td>
-                <td class="actions" data-th="">
-                  <div class="text-right">
-                    <button class="btn btn-white border-secondary bg-white btn-md mb-2">
-                      <i class="fas fa-sync"></i>
-                    </button>
-                    <button class="btn btn-white border-secondary bg-white btn-md mb-2">
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
+                  </td>
+                </tr>
+              <?php endforeach; ?>
             </tbody>
           </table>
           <div class="float-right text-right">
-            <h4>Subtotal:</h4>
-            <h1>$99.00</h1>
+          <?php
+          $totalPrice = 0;
+
+          foreach ($_SESSION['cart'] as $product) {
+            $totalPrice += $product['price'] * $product['quantity'];
+          }
+
+          echo "<h1>Subtotal: {$totalPrice} $</h1>";
+          ?>
           </div>
         </div>
       </div>

@@ -15,6 +15,40 @@ $stmt->execute();
 $najskuplja = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
+<?php
+// Provjeri postoji li proizvod u GET parametrima
+if (isset($_POST['id'])) {
+  $productId = $_POST['id'];
+  $quantity = $_POST['quantity'];
+
+  // Provjeri postoji li proizvod s traženim ID-om u bazi podataka
+  $stmt = $pdo->prepare("SELECT * FROM products WHERE id = :id");
+  $stmt->execute(['id' => $productId]);
+  $product = $stmt->fetch(PDO::FETCH_ASSOC);
+
+  if ($product) {
+    // Dodaj proizvod u košaricu
+    if (!isset($_SESSION['cart'])) {
+      $_SESSION['cart'] = array();
+    }
+
+    if (isset($_SESSION['cart'][$productId])) {
+      $_SESSION['cart'][$productId]['quantity'] += $quantity;
+    } else {
+      $_SESSION['cart'][$productId] = array(
+        'id' => $product['id'],
+        'title' => $product['title'],
+        'price' => $product['price'],
+        'quantity' => $quantity
+      );
+    }
+    echo "Proizvod je dodan u košaricu.";
+  } else {
+    echo "Proizvod ne postoji.";
+  }
+}
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -93,22 +127,29 @@ $najskuplja = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <div class="container">
     <h3>Featured products</h3>
     <div class="row g-3">
-      <?php foreach ($najskuplja as $products) : ?>
+      <?php foreach ($najskuplja as $product) : ?>
         <div class="col-12 col-md-6 col-lg-4">
           <div class="card">
-            <a href="product.php?page=product&id=<?= $products['id'] ?>">
-              <img src="Ref/<?= $products['img'] ?>" alt="ph" class="card-img-top">
+            <a href="product.php?page=product&id=<?= $product['id'] ?>">
+              <img src="Ref/<?= $product['img'] ?>" alt="ph" class="card-img-top">
               <div class="card-body">
-                <h5 class="card-title"><?= $products['title'] ?></h5>
+                <h5 class="card-title"><?= $product['title'] ?></h5>
             </a>
-            <p class="card-text"><?= $products['price'] ?>$</p>
-            <a href="" class="btn">Order now</a>
+            <p class="card-text"><?= $product['price'] ?>$</p>
+            <form method="POST" action="home.php">
+              <input type="hidden" name="id" value="<?= $product['id'] ?>">
+              <div class="form-group">
+                <label for="quantity">Quantity:</label>
+                <input type="number" name="quantity" class="form-control" value="1">
+              </div>
+              <button type="submit" class="btn btn-primary">Add to Cart</button>
+            </form>
           </div>
         </div>
     </div>
   <?php endforeach; ?>
-  </div>
-  </div>
+</div>
+</div>
 
   <br>
   <br>
