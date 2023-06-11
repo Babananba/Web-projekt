@@ -1,22 +1,19 @@
 <?php
 session_start();
-// Uspostavi vezu s bazom podataka
+
 $username = "root";
 $password = "";
 $db = new PDO('mysql:host=localhost;dbname=ooplogin', $username, $password);
 
-// Provjeri je li korisnik pritisnuo gumb "Dodaj u košaricu"
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
   $productId = $_POST['id'];
   $quantity = $_POST['quantity'];
 
-  // Provjeri postoji li proizvod s traženim ID-om u bazi podataka
   $stmt = $db->prepare("SELECT * FROM products WHERE id = :id");
   $stmt->execute(['id' => $productId]);
   $product = $stmt->fetch(PDO::FETCH_ASSOC);
 
   if ($product) {
-    // Dodaj proizvod u košaricu
     $_SESSION['cart'][$productId] = [
       'id' => $product['id'],
       'title' => $product['title'],
@@ -29,9 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
   }
 }
 
-// ... ostali dijelovi koda za ažuriranje, brisanje i prikazivanje košarice ...
-
-// Prikazivanje proizvoda u košarici
 if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
   foreach ($_SESSION['cart'] as $productId => $product) {
     $total = $product['price'] * $product['quantity'];
@@ -41,11 +35,9 @@ if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
   echo "Košarica je prazna.";
 }
 
-// Ažuriranje količine proizvoda u košarici
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_quantity'])) {
   $productId = $_POST['id'];
   $quantity = $_POST['quantity'];
-
   if (isset($_SESSION['cart'][$productId])) {
     $_SESSION['cart'][$productId]['quantity'] = $quantity;
     echo "Količina proizvoda je ažurirana.";
@@ -54,11 +46,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_quantity'])) {
   }
 }
 
-
-// Brisanje proizvoda iz košarice
 if (isset($_GET['remove'])) {
   $productId = $_GET['remove'];
-
   if (isset($_SESSION['cart'][$productId])) {
     unset($_SESSION['cart'][$productId]);
     echo "Proizvod je uklonjen iz košarice.";
@@ -151,9 +140,15 @@ if (isset($_GET['remove'])) {
                 <tr>
                   <td data-th="Product">
                     <div class="row">
-                      <div class="col-md-3 text-left">
-                        <img src="https://via.placeholder.com/250x250/5fa9f8/ffffff" alt="" class="img-fluid d-none d-md-block rounded mb-2 shadow ">
-                      </div>
+                    <?php
+                    $stmt = $db->prepare("SELECT img FROM products WHERE id = :id");
+                    $stmt->execute(['id' => $productId]);
+                    $productImage = $stmt->fetchColumn();
+                    $product['img'] = $productImage;
+                    ?>
+                    <div class="col-md-3 text-left">
+                      <img src="Ref/<?= isset($product['img']) ? $product['img'] : '' ?>" alt="" class="img-fluid d-none d-md-block rounded mb-2 shadow">
+                    </div>
                       <div class="col-md-9 text-left mt-sm-2">
                         <h4><?= $product['title'] ?></h4>
                         <p class="font-weight-light">Brand &amp; Name</p>
@@ -181,11 +176,9 @@ if (isset($_GET['remove'])) {
           <div class="float-right text-right">
           <?php
           $totalPrice = 0;
-
           foreach ($_SESSION['cart'] as $product) {
             $totalPrice += $product['price'] * $product['quantity'];
           }
-
           echo "<h1>Subtotal: {$totalPrice} $</h1>";
           ?>
           </div>
@@ -299,3 +292,5 @@ if (isset($_GET['remove'])) {
 </body>
 
 </html>
+
+

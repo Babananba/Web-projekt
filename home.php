@@ -13,21 +13,16 @@ try {
 $stmt = $pdo->prepare('SELECT * FROM products ORDER BY price DESC LIMIT 3');
 $stmt->execute();
 $najskuplja = $stmt->fetchAll(PDO::FETCH_ASSOC);
-?>
 
-<?php
-// Provjeri postoji li proizvod u GET parametrima
 if (isset($_POST['id'])) {
   $productId = $_POST['id'];
   $quantity = $_POST['quantity'];
 
-  // Provjeri postoji li proizvod s traženim ID-om u bazi podataka
   $stmt = $pdo->prepare("SELECT * FROM products WHERE id = :id");
   $stmt->execute(['id' => $productId]);
   $product = $stmt->fetch(PDO::FETCH_ASSOC);
 
   if ($product) {
-    // Dodaj proizvod u košaricu
     if (!isset($_SESSION['cart'])) {
       $_SESSION['cart'] = array();
     }
@@ -142,7 +137,7 @@ if (isset($_POST['id'])) {
                 <label for="quantity">Quantity:</label>
                 <input type="number" name="quantity" class="form-control" value="1">
               </div>
-              <button type="submit" class="btn btn-primary">Add to Cart</button>
+              <button type="submit" class="btn btn-primary mt-3">Add to Cart</button>
             </form>
           </div>
         </div>
@@ -150,11 +145,9 @@ if (isset($_POST['id'])) {
   <?php endforeach; ?>
 </div>
 </div>
-
   <br>
   <br>
   <br>
-
   <footer class="text-center text-lg-start bg-white text-muted">
     <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
       <div class="me-5 d-none d-lg-block">

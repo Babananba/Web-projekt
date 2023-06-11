@@ -11,20 +11,44 @@ try {
 }
 
 if (isset($_GET['id'])) {
-    // Prepare statement and execute, prevents SQL injection
     $stmt = $pdo->prepare('SELECT * FROM products WHERE id = ?');
     $stmt->execute([$_GET['id']]);
-    // Fetch the product from the database and return the result as an Array
     $products = $stmt->fetch(PDO::FETCH_ASSOC);
-    // Check if the ploca exists (array is not empty)
     if (!$products) {
-        // Simple error to display if the id for the ploca doesn't exists (array is empty)
         exit('!');
     }
 } else {
-    // Simple error to display if the id wasn't specified
     exit('!');
 }
+
+if (isset($_POST['id'])) {
+    $productId = $_POST['id'];
+    $quantity = $_POST['quantity'];
+  
+    $stmt = $pdo->prepare("SELECT * FROM products WHERE id = :id");
+    $stmt->execute(['id' => $productId]);
+    $product = $stmt->fetch(PDO::FETCH_ASSOC);
+  
+    if ($product) {
+      if (!isset($_SESSION['cart'])) {
+        $_SESSION['cart'] = array();
+      }
+  
+      if (isset($_SESSION['cart'][$productId])) {
+        $_SESSION['cart'][$productId]['quantity'] += $quantity;
+      } else {
+        $_SESSION['cart'][$productId] = array(
+          'id' => $product['id'],
+          'title' => $product['title'],
+          'price' => $product['price'],
+          'quantity' => $quantity
+        );
+      }
+      echo "Proizvod je dodan u košaricu.";
+    } else {
+      echo "Proizvod ne postoji.";
+    }
+  }
 ?>
 
 <!DOCTYPE html>
@@ -36,7 +60,9 @@ if (isset($_GET['id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="style.css" class="">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <link rel="stylesheet" href="product.css" class="">
     <script src="https://kit.fontawesome.com/d7256736fd.js" crossorigin="anonymous"></script>
 
 </head>
@@ -80,29 +106,38 @@ if (isset($_GET['id'])) {
                 </div>
             </div>
         </nav>
-
-
     </div>
 
     <br>
     <br>
     <br>
 
-    <div class="container">
-        <img src="Ref/<?= $products['img'] ?>" width="700" height="500" alt="<?= $products['title'] ?>">
-        <div>
-            <h1 class="card-title">
-                <?= $products['title'] ?>
-                </h5>
-                <span class="price">
-                    <?= $products['price'] ?>$
-                </span>
-                <div class="description">
-                    <?= $products['opis'] ?>
+    <section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <div class="col-md-6">
+                <img class="card-img-top mb-5 mb-md-0" src="Ref/<?= $products['img'] ?>" alt="..." />
+            </div>
+            <div class="col-md-6">
+                <h1 class="display-5 fw-bolder"><?= $products['title'] ?></h1>
+                <div class="fs-5 mb-5">
+                    <span><?= $products['price'] ?>$</span>
                 </div>
-                <a href="" class="btn">Order now</a>
+                <p class="lead"><?= $products['opis'] ?></p>
+                <form method="POST" action="home.php">
+                    <input type="hidden" name="id" value="<?= $products['id'] ?>">
+                    <div class="d-flex">
+                        <input class="form-control text-center me-3" name="quantity" id="inputQuantity" type="number" value="1" style="max-width: 3rem" />
+                        <button class="btn btn-outline-dark flex-shrink-0" type="submit">
+                            <i class="bi-cart-fill me-1"></i>
+                            Add to cart
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
+    </section>
 
     <br>
     <br>
