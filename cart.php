@@ -68,6 +68,7 @@ if (isset($_GET['remove'])) {
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
   <link rel="stylesheet" href="style.css" class="">
   <script src="https://kit.fontawesome.com/d7256736fd.js" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
 </head>
@@ -157,12 +158,40 @@ if (isset($_GET['remove'])) {
                   </td>
                   <td data-th="Price"><?= $product['price'] ?></td>
                   <td data-th="Quantity">
-                    <form method="POST" action="cart.php">
-                      <input type="hidden" name="update_quantity" value="true">
-                      <input type="hidden" name="id" value="<?= $productId ?>">
-                      <input type="number" name="quantity" value="<?= $product['quantity'] ?>" min="1">
-                      <input type="submit" value="Ažuriraj">
-                    </form>
+                    <input type="number" name="quantity" value="<?= $product['quantity'] ?>" min="1" class="quantity-input">
+                    <button class="update-button" data-id="<?= $productId ?>">Ažuriraj</button>
+
+                    <script>
+                    $(document).ready(function() {
+                      $(".update-button").click(function() {
+                        var productId = $(this).data('id');
+                        var quantity = $(this).siblings(".quantity-input").val();
+
+                        $.ajax({
+                          type: "POST",
+                          url: "update_cart.php",
+                          data: {
+                            id: productId,
+                            quantity: quantity
+                          },
+                          success: function(response) {
+                            var data = JSON.parse(response);
+                            alert(data.message); // Ispisujemo poruku iz odgovora
+
+                            // Ažuriranje subtotala
+                            var totalPrice = 0;
+                            for (var key in data.cart) {
+                              if (data.cart.hasOwnProperty(key)) {
+                                var product = data.cart[key];
+                                totalPrice += parseFloat(product.price) * parseInt(product.quantity);
+                              }
+                            }
+                            $("#subtotal-amount").text(totalPrice.toFixed(2) + " $");
+                          }
+                        });
+                      });
+                    });
+                  </script>
                   </td>
                   <td class="actions" data-th="">
                     <div class="text-right">
@@ -173,13 +202,13 @@ if (isset($_GET['remove'])) {
               <?php endforeach; ?>
             </tbody>
           </table>
-          <div class="float-right text-right">
+          <div id="subtotal" class="float-right text-right">
           <?php
           $totalPrice = 0;
           foreach ($_SESSION['cart'] as $product) {
             $totalPrice += $product['price'] * $product['quantity'];
           }
-          echo "<h1>Subtotal: {$totalPrice} $</h1>";
+          echo "<h1>Subtotal: <span id=\"subtotal-amount\">{$totalPrice} $</span></h1>";
           ?>
           </div>
         </div>

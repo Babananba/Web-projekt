@@ -42,7 +42,6 @@ if (isset($_POST['id'])) {
     echo "Proizvod ne postoji.";
   }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -56,13 +55,39 @@ if (isset($_POST['id'])) {
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
   <link rel="stylesheet" href="style.css" class="">
   <script src="https://kit.fontawesome.com/d7256736fd.js" crossorigin="anonymous"></script>
-
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+  $(document).ready(function() {
+    $('form').submit(function(e) {
+      e.preventDefault(); 
+      var form = $(this);
+      $.ajax({
+        type: form.attr('method'),
+        url: form.attr('action'),
+        data: form.serialize(),
+        success: function(response) {
+          var message = $('<div class="alert alert-success">Proizvod je dodan u košaricu.</div>'); 
+          $('#message').html(message); 
+          setTimeout(function() {
+            message.remove(); 
+          }, 1000);
+        }
+      });
+    });
+    
+    $('.btn.btn-primary').click(function() {
+      var message = $('<div class="alert alert-success">Proizvod je dodan u košaricu.</div>'); 
+      $('#message').html(message); 
+      setTimeout(function() {
+        message.remove(); 
+      }, 1000);
+    });
+  });
+</script>
 
 </head>
-
 <body>
   <div class="header">
-
     <nav class="navbar navbar-expand-sm navbar-light" style="background-color: #FFA500;">
       <div class="container">
         <a class="navbar-brand" href="home.php"><img src="Ref/PCLogo.png" width="90px"></a>
@@ -106,7 +131,6 @@ if (isset($_POST['id'])) {
         <div class="col-2">
           <h1>Introducing! the AMD Radeon™ RX 7900 XT</h1>
           <h3>The Most Advanced Graphics for Gamers & Creators.</h3>
-          <a href="" class="btn">Order now</a>
         </div>
         <div class="col-2">
           <img src="Ref/Rx7900xt.png">
@@ -143,6 +167,7 @@ if (isset($_POST['id'])) {
         </div>
     </div>
   <?php endforeach; ?>
+  <div id="message"></div>
 </div>
 </div>
   <br>
